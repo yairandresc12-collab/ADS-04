@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 public class cajero {
 
-    private int saldo = 700000, saldoC = 20000000, retiroD = 2100000;
+    private int saldo = 7000000, saldoC = 20000000, retiroD = 2100000;
     private boolean continuar = true;
 
     public cajero() {
@@ -65,7 +65,7 @@ public class cajero {
                          retirar();
                         break;
                     case 4:
-                        Confirmarsalida();
+                        salir();
                         break;
                     default:
                         throw new AssertionError();
@@ -100,30 +100,36 @@ public class cajero {
 
     public void consiGnardinero() {
         try {
-
+            JOptionPane.showMessageDialog(null,"NO SE PUDEN INGRESAR MONEDAS ","ALVERTENCIA",JOptionPane.WARNING_MESSAGE);
             StringBuilder consi = new StringBuilder();
             consi.append("cosignar dinero");
             String sig = JOptionPane.showInputDialog(null, consi, "cosignar saldo", JOptionPane.DEFAULT_OPTION);
             int consig = Integer.parseInt(sig);
             if (consig < 10000) {
-                JOptionPane.showInternalConfirmDialog(null, "error nose puden consignar menos de 10000", "error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showInternalConfirmDialog(null, "ERROR NOSE PUDEN INGRESAR MENOS  10000", "error", JOptionPane.WARNING_MESSAGE);
                 return;
 
             }
+            if (consig > 2100000){
+                JOptionPane.showInternalMessageDialog(null,"HAS EXCEDIDOEL LIMITE DE CONSIGNACION","ERROR",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             saldo = consig + saldo;
         } catch (Exception e) {
-            JOptionPane.showInternalMessageDialog(null, "solo pude ingresar valores numericos ", "VALOR INVALIDO", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showInternalMessageDialog(null, "SOLO SE PUDEN INGRESAR VALORES NUMERICOS ", "VALOR INVALIDO", JOptionPane.WARNING_MESSAGE);
         }
 
     }
     public void retirar(){
         try {
+            JOptionPane.showInternalMessageDialog(null,"NOSE PUDEN INGRESAR MONEDAS","ALVERTENCIA",JOptionPane.WARNING_MESSAGE);
             String inicio = JOptionPane.showInputDialog(null," ingrese la cantida de dinero que desea retirar (minimo $10.000):",
              "retirar dinero",JOptionPane.QUESTION_MESSAGE);
             
             if(inicio == null)return;
             
-            int valor = Integer.parseInt(inicio);
+            int valor = 10000;
             
             if (valor< 10000){
                 JOptionPane.showMessageDialog(null,
@@ -132,25 +138,38 @@ public class cajero {
                 return;
                 
             }
-            
             if (valor > saldo){
                 JOptionPane.showMessageDialog(null,"fondos insuficientes.\nSaldo actual: $"+
                         String.format("%,d", saldo),
-                        "error",JOptionPane.ERROR_MESSAGE);
+                        "ERROR",JOptionPane.ERROR_MESSAGE);
                 return;
                 
             }
-            saldo -= valor;
+            else {
+                JOptionPane.showMessageDialog(null,"VALOR INCORRECTO","ERROR",
+                        JOptionPane.WARNING_MESSAGE);
+            
+            }
+            if(valor==retiroD){
+                JOptionPane.showMessageDialog(null,"nose puden retirar mas de 2.100.000");
+            }
             
             JOptionPane.showMessageDialog(null,"retiro exitoso\n"+
                     idValidacion()+"\n\n"+
                     "nuevo saldo:$" + String.format("%,d,",saldo),
             "retiro realizado",JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Debe ingresar un numero valido.",
+            JOptionPane.showMessageDialog(null,"DEBES INGRESAR UN VALOR VALIDO ",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
+       
+    }public void salir(){
+        if (Confirmarsalida() ){
+            continuar=false;
+        }
+            
+    }    
 }
+
 
 
